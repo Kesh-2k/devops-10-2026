@@ -1,8 +1,8 @@
 {
   "image": "mcr.microsoft.com/devcontainers/universal:2",
-  "forwardPorts": [8000],
+  "forwardPorts": [8001],
   "portsAttributes": {
-    "8000": {
+    "8001": {
       "label": "API Tarefas",
       "onAutoForward": "openBrowser"
     }
