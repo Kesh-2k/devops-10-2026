@@ -4,6 +4,14 @@ from datetime import datetime
 from fastapi import FastAPI
 import requests
 from requests.exceptions import ConnectionError as RequestConnectionError
+from pydantic import BaseModel
+
+class Tarefa(BaseModel):
+    id: int
+    titulo: str
+    descricao: str
+    concluida: bool
+    criada_em: datetime
 
 APP = FastAPI()
 TAREFAS = []
@@ -118,7 +126,16 @@ async def index():
     """ Rota raíz. """
     return {"mensagem": "Olá, mundo!"}
 
+# 1. Implementar uma rota chamada "/autor" que retorna
+# um dicionário no formato {"mensagem": SEU NOME COMPLETO}
 @APP.get("/autor")
 async def autor():
-    """Retorna o nome completo do autor da aplicação."""
-    return {"Mensagem": "Jeferson de Santana Silva"}
+    """ Rota para retornar o autor da aplicação """
+    return {"mensagem": "Pedro Rocha Horchulhack"}
+
+# 2. Criar um teste unitário para verificar se a rota
+# está produzindo o resultado esperado
+
+# 3. Verificar se o código está no padrão do PyLint
+
+# 4. Enviar o código para o repositório (git push)
