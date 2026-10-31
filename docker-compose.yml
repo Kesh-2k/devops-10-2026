@@ -1,0 +1,49 @@
+# Sobe tudo: MySQL, API de tarefas, notificações e o Nginx na frente (http://localhost:8000).
+# Senhas vêm do .env (veja .env.example).
+services:
+  db:
+    image: mysql:8.4
+    environment:
+      MYSQL_DATABASE: ${DATABASE:-tarefas}
+      MYSQL_USER: ${DATABASE_USERNAME:-tarefas}
+      MYSQL_PASSWORD: ${DATABASE_PASSWORD:?defina DATABASE_PASSWORD no .env}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:?defina MYSQL_ROOT_PASSWORD no .env}
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "--silent"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  api:
+    build: .
+    environment:
+      APP: app.api:APP
+      PORT: "8001"
+      DATABASE_USERNAME: ${DATABASE_USERNAME:-tarefas}
+      DATABASE_PASSWORD: ${DATABASE_PASSWORD}
+      DATABASE_ADDRESS: db
+      DATABASE: ${DATABASE:-tarefas}
+    depends_on:
+      db:
+        condition: service_healthy
+
+  notificacoes:
+    build: .
+    environment:
+      APP: app.notificacoes:NOTIFICACAO
+      PORT: "8002"
+
+  nginx:
+    image: nginx:1.27-alpine
+    ports:
+      - "8000:80"
+    volumes:
+      - ./default.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      - api
+      - notificacoes
+
+volumes:
+  mysql_data:
