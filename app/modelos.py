@@ -1,20 +1,28 @@
-from pydantic import BaseModel
+"""Modelos da aplicação de tarefas"""
 
-class Autor(BaseModel):
-    id: int
-    nome: str
-    email: str
-    criado_em: str
+from datetime import datetime, timezone
+from typing import Optional
+from sqlmodel import SQLModel, Field
 
-class Livro(BaseModel):
-    id: int
+class Tarefa(SQLModel, table=True):
+    """Modelo de tarefa"""
+
+    id: int | None = Field(alias="_id", primary_key=True, unique=True, default=None)
     titulo: str
-    autor_id: int
-    publicado_em: str
+    descricao: Optional[str] = None
+    concluida: bool = False
+    data_criacao: datetime
+    data_conclusao: Optional[datetime] = None
 
-class Tarefa(BaseModel):
-    id: int
-    titulo: str
-    descricao: str
-    concluida: bool
-    criada_em: str        
+    def finalizar(self):
+        """Método para finalizar tarefa"""
+        self.concluida = True
+        self.data_conclusao = datetime.now().astimezone(timezone.utc)
+
+    def resumir(self):
+        """Resume tarefa em `id: titulo`"""
+        return {self.id: self.titulo}
+
+    def get_id(self):
+        """Retorna ID da tarefa"""
+        return self.id

@@ -1,15 +1,32 @@
-"""Testes para a rota de autoria."""
-
-from fastapi.testclient import TestClient
-
-from app.api import APP
-
-CLIENT = TestClient(APP)
+from datetime import datetime
+from app.modelo import Tarefa
 
 
-def test_autor():
-    """Verifica a resposta da rota de autoria."""
-    resposta = CLIENT.get("/autor")
+def criar_tarefa_mock():
+    return Tarefa(
+        _id=0,
+        titulo="Tarefa teste",
+        data_criacao=datetime.now().isoformat(timespec="seconds"),
+    )
 
-    assert resposta.status_code == 200
-    assert resposta.json() == {"Mensagem": "Jeferson de Santana Silva"}
+
+def test_nova_tarefa():
+    t = criar_tarefa_mock()
+
+    assert t.get_id() == 0
+    assert t.titulo == "Tarefa teste"
+    assert t.descricao == None
+    assert t.data_criacao.isoformat() == datetime.now().isoformat(timespec="seconds")
+    assert t.data_conclusao == None
+    assert t.concluida == False
+
+
+# Implementar teste unitário para verificar se a tarefa foi concluida
+
+
+def test_tarefa_concluida():
+    t = criar_tarefa_mock()
+
+    t.finalizar()
+    assert t.concluida == True
+    assert t.data_conclusao == datetime.now().isoformat(timespec="seconds")

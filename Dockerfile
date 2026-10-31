@@ -4,7 +4,6 @@ RUN mkdir /app
 
 WORKDIR /app
 
-#    Host  ->  Contêiner
 COPY app.py ./app.py
 COPY requirements.txt ./requirements.txt
 
