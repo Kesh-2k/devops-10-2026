@@ -1,5 +1,5 @@
-# This workflow will install Python dependencies, run tests and lint with a single version of Python
-# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-python
+# Instala as dependências, roda o lint e os testes com uma versão de Python.
+# Os testes usam SQLite em memória (sem variáveis DATABASE_*), então não precisam de MySQL.
 
 name: DevOps 30/10/2026
 
@@ -20,17 +20,18 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
-    - name: Set up Python 3.10
-      uses: actions/setup-python@v3
+    - name: Set up Python 3.12
+      uses: actions/setup-python@v5
       with:
-        python-version: "3.10"
+        python-version: "3.12"
+        cache: pip
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
         python -m pip install -r requirements.txt
     - name: Lint with pylint
       run: |
-        pylint app.py tests/test_autor.py
+        pylint app tests
     - name: Test with pytest
       run: |
-        pytest
+        pytest --cov=app

@@ -1,0 +1,7 @@
+[MAIN]
+# Os testes importam o pacote "app" a partir da raiz do repositório.
+init-hook="import sys; sys.path.insert(0, '.')"
+
+[MESSAGES CONTROL]
+# Modelos do SQLModel/Pydantic têm poucos métodos públicos de propósito.
+disable=too-few-public-methods

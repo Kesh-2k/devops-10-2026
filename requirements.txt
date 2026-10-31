@@ -1,5 +1,5 @@
 fastapi[standard]
-httpx2
+httpx
 pytest
 pytest-cov
 pylint
@@ -8,3 +8,4 @@ ruff
 sqlmodel
 sqlalchemy
 pymysql
+cryptography
